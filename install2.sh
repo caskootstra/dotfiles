@@ -66,9 +66,10 @@ installzsh() {
     echo "Installing Oh My Zsh..."
     cd $temp_dir
     mkdir omz
+    cd omz
     curl -fsSl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
     chmod +x install.sh
-    sh ./install.sh
+    bash ./install.sh
     cd ..
     rm -rf omz
 
