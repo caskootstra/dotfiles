@@ -17,6 +17,10 @@ COLOR_NC='\033[0m'
 
 # -------------- Visual functions -------------- #
 
+lib_loaded() {
+  return 0
+}
+
 output() {
   echo -e "* $1"
 }
