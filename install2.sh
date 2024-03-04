@@ -133,8 +133,9 @@ else
     exit 1
 fi
 
-output "hi"
-success "hi"
+output "output"
+success "success"
+echo "echo"
 
 # Create the temp dir
 createtemp
