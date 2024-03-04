@@ -6,7 +6,7 @@ set -e
 case "$(echo "$SHELL" | sed -E 's|/usr(/local)?||g')" in
     "/bin/zsh")
         RCPATH="$HOME/.zshrc"
-        SOURCE="${BASH_SOURCE[0]:-${(%):-%N}}"
+        #SOURCE="${BASH_SOURCE[0]:-${(%):-%N}}"
     ;;
     *)
         RCPATH="$HOME/.bashrc"
@@ -33,14 +33,14 @@ if ! [ -x "$(command -v curl)" ]; then
   exit 1
 fi
 
-cd $basedir
+cd "$basedir"
 
 
 # Always remove lib.sh, before downloading it
 #rm -rf /tmp/lib.sh
 #curl -sSL -o /tmp/lib.sh "$GITHUB_BASE_URL"/"$GITHUB_SOURCE"/lib/lib.sh
 # shellcheck source=lib/lib.sh
-source $basedir/lib/lib.sh
+source "$basedir"/lib/lib.sh
 
 # variables
 GITHUB_USER="powercasgamer"
