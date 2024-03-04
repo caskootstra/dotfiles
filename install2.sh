@@ -67,9 +67,7 @@ installzsh() {
     cd $temp_dir
     mkdir omz
     cd omz
-    curl -fsSl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-    chmod +x install.sh
-    bash ./install.sh --unattended
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
     cd ..
     rm -rf omz
 
