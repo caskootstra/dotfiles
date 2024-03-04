@@ -133,6 +133,9 @@ else
     exit 1
 fi
 
+output "hi"
+success "hi"
+
 # Create the temp dir
 createtemp
 
