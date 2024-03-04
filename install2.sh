@@ -6,7 +6,7 @@ set -e
 case "$(echo "$SHELL" | sed -E 's|/usr(/local)?||g')" in
     "/bin/zsh")
         RCPATH="$HOME/.zshrc"
-        SOURCE="${BASH_SOURCE[0]}:-${(%):-%N}}"
+        SOURCE="${{(%):-%N}}"
     ;;
     *)
         RCPATH="$HOME/.bashrc"
