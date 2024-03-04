@@ -6,14 +6,14 @@ set -e
 case "$(echo "$SHELL" | sed -E 's|/usr(/local)?||g')" in
     "/bin/zsh")
         RCPATH="$HOME/.zshrc"
-        SOURCE="$0:-${(%):-%N}}"
+        SOURCE="${BASH_SOURCE[0]}:-${(%):-%N}}"
     ;;
     *)
         RCPATH="$HOME/.bashrc"
         #if [[ -f "$HOME/.bash_aliases" ]]; then
         #    RCPATH="$HOME/.bash_aliases"
         #fi
-        SOURCE="$0"
+        SOURCE="${BASH_SOURCE[0]}"
     ;;
 esac
 
@@ -64,7 +64,15 @@ installzsh() {
 
     # Install Oh My Zsh
     echo "Installing Oh My Zsh..."
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    cd $temp_dir
+    mkdir omz
+    curl -fsSl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    chmod +x install.sh
+    sh ./install.sh
+    cd ..
+    rm -rf omz
+
+    cd $basedir
 
     # Change the default shell to Zsh
     echo "Changing default shell to Zsh..."
