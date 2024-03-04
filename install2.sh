@@ -6,14 +6,14 @@ set -e
 case "$(echo "$SHELL" | sed -E 's|/usr(/local)?||g')" in
     "/bin/zsh")
         RCPATH="$HOME/.zshrc"
-        SOURCE="${BASH_SOURCE[0]:-${(%):-%N}}"
+        SOURCE="$0:-${(%):-%N}}"
     ;;
     *)
         RCPATH="$HOME/.bashrc"
         #if [[ -f "$HOME/.bash_aliases" ]]; then
         #    RCPATH="$HOME/.bash_aliases"
         #fi
-        SOURCE="${BASH_SOURCE[0]}"
+        SOURCE="$0"
     ;;
 esac
 
