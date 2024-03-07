@@ -75,8 +75,15 @@ plugins=(
     gradle
     gh
     gpg-agent
+    ssh-agent
     mvn
+    ufw
+    sdk
+    tmux
 )
+
+# zstyle :omz:plugins:ssh-agent agent-forwarding yes
+# zstyle :omz:plugins:ssh-agent identities id_rsa id_rsa2 id_github
 
 source $ZSH/oh-my-zsh.sh
 
@@ -87,7 +94,10 @@ eval `dircolors ~/.dircolors`
 # User configuration
 
 # You may need to manually set your language environment
+export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+
+# Aliases
 
 alias killgradle="pkill -f '.*GradleDaemon.*'"
 alias deletegradle="rm -rf ~/.gradle/daemon"
@@ -96,3 +106,10 @@ alias deletezoneid="find . -name \"*:Zone.Identifier\" -type f -delete"
 alias gpush="git fetch; git pull; git add .; git commit -m \"$@\" && git push origin main"
 
 alias bsha256='function _bsha256(){ sha256sum "$1" | awk "{print \$1}" | xxd -r -p | base64; };_bsha256'
+alias bsha512='function _bsha512(){ sha512sum "$1" | awk "{print \$1}" | xxd -r -p | base64; };_bsha512'
+
+diegradledie() {
+    for proc in $(ps -aux | grep gradle | grep -v grep | awk '{ print $2}'); do
+        kill -9 $proc
+    done
+}

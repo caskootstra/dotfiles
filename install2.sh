@@ -6,23 +6,26 @@ set -e
 case "$(echo "$SHELL" | sed -E 's|/usr(/local)?||g')" in
     "/bin/zsh")
         RCPATH="$HOME/.zshrc"
-        SOURCE="${(%):-%N}"
+        SOURCE="${FUNCNAME[1]:-$0}"  # Use FUNCNAME array in Zsh
     ;;
     *)
         RCPATH="$HOME/.bashrc"
-        #if [[ -f "$HOME/.bash_aliases" ]]; then
+        # if [[ -f "$HOME/.bash_aliases" ]]; then
         #    RCPATH="$HOME/.bash_aliases"
-        #fi
+        # fi
         SOURCE="${BASH_SOURCE[0]}"
     ;;
 esac
 
 # get base dir regardless of execution location
-while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+while [ -h "$SOURCE" ] || [ -L "$SOURCE" ]; do
     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
     SOURCE="$(readlink "$SOURCE")"
-    [[ "$SOURCE" != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+    if [[ "$SOURCE" != /* ]]; then
+        SOURCE="$DIR/$SOURCE"  # if $SOURCE was a relative symlink, resolve it relative to the path where the symlink file was located
+    fi
 done
+
 SOURCE=$([[ "$SOURCE" = /* ]] && echo "$SOURCE" || echo "$PWD/${SOURCE#./}")
 basedir=$(dirname "$SOURCE")
 
@@ -94,7 +97,7 @@ installzsh() {
       curl -s https://github.com/"$user".keys >> "$HOME"/.ssh/authorized_keys
     done
 
-    output "Zsh and Oh My Zsh installation completed. Please restart your terminal to apply changes."
+    success "Zsh and Oh My Zsh installation completed. Please restart your terminal to apply changes."
 }
 
 installsdkman() {
@@ -102,7 +105,7 @@ installsdkman() {
   curl -s "https://get.sdkman.io" | bash
   source "$HOME/.sdkman/bin/sdkman-init.sh"
   sdk version
-  output "SDKMAN installation completed."
+  success "SDKMAN installation completed."
 }
 
 install_zstd() {
@@ -136,21 +139,17 @@ elif [ -n "$(command -v yum)" ]; then
     output "Detected CentOS. Installing prerequisites..."
     sudo yum install -y git curl zip unzip sed
 else
-    output "Unsupported system. Please install prerequisites manually."
+    eror "Unsupported system. Please install prerequisites manually."
     exit 1
 fi
-
-output "output"
-success "success"
-echo "echo"
 
 # Create the temp dir
 createtemp
 
-# install zsh
-installzsh
 installsdkman
 install_zstd
+# install zsh
+installzsh
 
 # exit
 exit
